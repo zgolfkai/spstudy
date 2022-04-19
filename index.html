@@ -1,0 +1,36 @@
+
+<br>
+<input class="hiddenDiv" id="disposition_codes" type="file" onchange="$('.hiddenClass').css('display','none');$('#disposition-loading').removeClass('hiddenDiv');parseData(event);">
+<span style="border:1px solid black;border-radius:5px;padding:10px;font-size: 12px;">
+    <label for="disposition_codes" style>Select Data (csv)</label>
+</span>&nbsp;&nbsp;
+<br>
+<br>
+<div class='row'>
+    <div class='column'>
+        <table class="check_data">
+            <thead>
+                <tr>
+                    <td>Timestamp</td>
+                    <td>Comment</td>
+                    <td>Is Visitor<br>Access<br>Allowed</td>
+                    <td>Plate</td>
+                    <td>Resident<br>Found<br>Count</td>
+                    <td>Visitor<br>Found<br>Count</td>
+                </tr>
+            </thead>
+            <tbody id="check_data_body">
+
+            </tbody>
+        </table>
+    </div>
+    <div class='column'>
+        
+    </div>
+    <div class="plate_container">
+        <div class="plate_view">
+            <img class='img_container' id="plate_img">
+            <div id="plate_zoom" class="img-zoom-result"></div>
+        </div>
+    </div>
+</div>
