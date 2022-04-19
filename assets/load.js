@@ -2,18 +2,6 @@ var checkArray;
 var checkContainer;
 var similarContainer=[];
 
-$(document).ready(function () {
-
-  $(window).on('resize', function (){
-    $('.img-zoom-lens').remove();
-    imageZoom("plate_img", "plate_zoom")
-  })
-
-
-  
-});
-
-
 function csvToArray(str, delimiter = ",") {
   // slice from start of text to the first \n index
   // use split to create an array from string by delimiter
@@ -46,52 +34,87 @@ function parseData(csvFilePath){
   var reader = new FileReader();
 
   var fileToLoad=csvFilePath.srcElement.files[0]
-  console.log(fileToLoad);
+  console.log(fileToLoad.name);
 
   reader.readAsText(fileToLoad);
   reader.onload = function (e) {
-      checkArray = csvToArray(e.target.result);
-      console.log(checkArray);
-      var notFound00 = checkArray.filter(obj => {
-        return (obj.ResidentFoundCount == 0) && (obj.VisitorFoundCount == 0); 
+      var checkArray = csvToArray(e.target.result);
+      var finalArray=[];
+      var current;
+      checkArray = cleanBlanks(checkArray);
+      checkArray.forEach(function(check){
+        check.similarity=0;
+        check.plateSim='';
       })
-      console.log(notFound00);
-      var similarTemp=[]
-      notFound00.forEach((row,index)=>{
-        counter=0;
-        do {
-          counter++;
-          var similar=similarity(row.Plate,checkArray[checkArray.findIndex(x => x.Timestamp == row.Timestamp)-counter].Plate);
-          console.log("Similarity: " + similar);
-          if (similar > 0.50){
-            if (counter==1){
-              similarTemp.push(checkArray.findIndex(x => x.Timestamp == row.Timestamp));
+      
+      for(i=0;i<checkArray.length;i++){
+        for(j=0;j<checkArray.length;j++){
+          if(i!=j){
+            currentSim=similarity(checkArray[i].Plate,checkArray[j].Plate)
+            if(currentSim>checkArray[i].similarity){
+              checkArray[i].similarity=currentSim;
+              checkArray[i].plateSim=checkArray[j].Plate;
             }
-            similarTemp.push(checkArray.findIndex(x => x.Timestamp == row.Timestamp)-counter)
           }
-        } while (similar>0.50);
-        do {
-          counter--;
-          var similar=similarity(row.Plate,checkArray[checkArray.findIndex(x => x.Timestamp == row.Timestamp)-counter].Plate);
-          console.log("Similarity: " + similar);
-          if (similar > 0.50){
-            if (counter==-1){
-              similarTemp.push(checkArray.findIndex(x => x.Timestamp == row.Timestamp));
-            }
-            similarTemp.push(checkArray.findIndex(x => x.Timestamp == row.Timestamp)-counter)
-          }
-        } while (similar>0.50);
-        if (similarTemp.length>0){
-          var duplicate=false;
-          similarTemp=[...new Set(similarTemp.sort())];
-          if(!isArrayInArray(similarContainer,similarTemp)){
-            similarContainer.push(similarTemp);
-          };
-          similarTemp=[];
         }
-      })
-      displayCheckData(similarContainer);
+      }
+      checkArray.sort((a, b) => {
+        let fa = a.plateSim.toLowerCase(), fb = b.plateSim.toLowerCase();
+
+        if (fa < fb) {
+            return -1;
+        }
+        if (fa > fb) {
+            return 1;
+        }
+        return 0;
+      });
+      console.log(checkArray)
+      /*while(checkArray.length>0){
+        current=checkArray.splice(0,1);
+        console.log(current);
+        console.log(checkArray.length);
+        finalArray.push(current[0]);
+        checkArray.forEach(function(check){
+          if(similarity(current[0].Plate,check.Plate)>0.5){
+            finalArray.push(checkArray.splice(checkArray.indexOf(check),1)[0])
+          }
+        })
+      }*/
+
+      data={
+        filename:fileToLoad.name.substring(0,fileToLoad.name.length-4),
+        message:checkArray
+      }
+
+      try{
+        $.ajax({
+          type:"POST",
+          url:"/api/createxls" ,
+          data:JSON.stringify(data),
+          headers:{
+            "Content-Type":"application/json"
+          },
+          //dataType:"json",
+          success:function(data){
+            $("#downloadFile").html('<a href="'+data.location+'">'+data.filename+'</a>')
+            return;
+          },
+          error:function(error){
+            console.log(error);
+          }
+        });
+      }catch(error){
+        console.log(error)
+      }
+
+      //displayCheckData(similarContainer);
   };
+}
+
+function cleanBlanks(data){
+  var cleanData=data.filter(row => row.PartitionKey.length > 0);
+  return cleanData;
 }
 
 function displayCheckData(data){
