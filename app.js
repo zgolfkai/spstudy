@@ -24,6 +24,8 @@ app.use('/', router);
 app.use('/assets',express.static(__dirname + '/assets'));
 app.use('/downloads',express.static(__dirname + '/downloads'));
 
+
+
 app.post("/api/createxls", (req, res, next) => {
     console.log('request')
     console.log(req.body);
