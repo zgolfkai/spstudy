@@ -29,6 +29,111 @@ function csvToArray(str, delimiter = ",") {
   return arr;
 }
 
+function createReport(sourcefilePath){
+  console.log(sourcefilePath);
+  $("#downloadReportFile").html('Processing files..')
+  
+  var filesToLoad=sourcefilePath.srcElement.files
+  var finalArray=[];
+
+  var filext;
+  console.log(filesToLoad);
+  for (i=0;i<filesToLoad.length;i++){
+    filext=filesToLoad[i].name.split('.').pop();
+    var reader = new FileReader();
+    if((filext.toLowerCase()=='xlsm')||(filext.toLowerCase()=='xlsx')){
+      reader.readAsBinaryString(filesToLoad[i]);
+      reader.onload = function(e) {
+        var data = e.target.result;
+        var workbook = XLSX.read(data, {
+          type: 'binary'
+        });
+        // Here is your object
+         var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets['Summary']);
+         finalArray.push(XL_row_object);
+        processReport(finalArray)
+      };
+    
+      reader.onerror = function(ex) {
+        console.log(ex);
+      };
+    }
+  }
+}
+
+function processReport(dataArray){
+  var finalReport={
+    "Parent":0,
+    "Child":0,
+    "Processed":0,
+    "NR-Parent":0,
+    "NR-Child":0,
+    "Ignore":0,
+    "Obstruction":0,
+    "Tag found-Gate not open":0,
+    "Temp Tag":0,
+    "Emergency Vehicle":0,
+    "Preauthorized Vendor":0,
+    "Other Lane Captured":0,
+    "Opted out of LPR":0,
+    "Translation Issue":0,
+    "Total Records":0,
+    "Total Cars Not Processed":0,
+    "Total Cars Processed":0,
+    "Accuracy":0
+  }
+
+
+
+  console.log(dataArray);
+  dataArray.forEach(function(file){
+    finalReport["Parent"]+=parseInt(file[1].undefined);
+    finalReport["Child"]+=parseInt(file[2].undefined);
+    finalReport["Processed"]+=parseInt(file[3].undefined);
+    finalReport["NR-Parent"]+=parseInt(file[4].undefined);
+    finalReport["NR-Child"]+=parseInt(file[5].undefined);
+    finalReport["Ignore"]+=parseInt(file[6].undefined);
+    finalReport["Obstruction"]+=parseInt(file[7].undefined);
+    finalReport["Tag found-Gate not open"]+=parseInt(file[8].undefined);
+    finalReport["Temp Tag"]+=parseInt(file[9].undefined);
+    finalReport["Emergency Vehicle"]+=parseInt(file[10].undefined);
+    finalReport["Preauthorized Vendor"]+=parseInt(file[11].undefined);
+    finalReport["Other Lane Captured"]+=parseInt(file[12].undefined);
+    finalReport["Opted out of LPR"]+=parseInt(file[13].undefined);
+    finalReport["Translation Issue"]+=parseInt(file[14].undefined);
+    finalReport["Total Records"]+=parseInt(file[15].undefined);
+    finalReport["Total Cars Not Processed"]+=parseInt(file[8].undefined);
+    for(i=1;i<15;i++){
+      if(i!=8)
+        finalReport["Total Cars Processed"]+=parseInt(file[i].undefined);
+    }
+  })
+  console.log(finalReport);
+  $("#Parent").html(finalReport["Parent"]);
+  $("#Child").html(finalReport["Child"]);
+  $("#Processed").html(finalReport["Processed"]);
+  $("#NR-Parent").html(finalReport["NR-Parent"]);
+  $("#NR-Child").html(finalReport["NR-Child"]);
+  $("#Ignore").html(finalReport["Ignore"]);
+  $("#Obstruction").html(finalReport["Obstruction"]);
+  $("#Tagfound-Gatenotopen").html(finalReport["Tag found-Gate not open"]);
+  $("#TempTag").html(finalReport["Temp Tag"]);
+  $("#EmergencyVehicle").html(finalReport["Emergency Vehicle"]);
+  $("#PreauthorizedVendor").html(finalReport["Preauthorized Vendor"]);
+  $("#OtherLaneCaptured").html(finalReport["Other Lane Captured"]);
+  $("#OptedoutofLPR").html(finalReport["Opted out of LPR"]);
+  $("#TranslationIssue").html(finalReport["Translation Issue"]);
+  $("#TotalRecords").html(finalReport["Total Records"]);
+  $("#TotalCarsNotProcessed").html(finalReport["Total Cars Not Processed"]);
+  $("#TotalCarsProcessed").html(finalReport["Total Cars Processed"]);
+  $("#Accuracy").html(((finalReport["Total Cars Processed"]/finalReport["Total Records"])*100).toLocaleString(
+    undefined, // leave undefined to use the visitor's browser 
+               // locale or a string like 'en-US' to override it.
+    { minimumFractionDigits: 2 }));
+    $("#downloadReportFile").html('')
+    $(".reportTable").css('display','block')
+}
+
 function parseData(csvFilePath){
   //check csvFilePath
   $("#downloadFile").html('Processing file..')

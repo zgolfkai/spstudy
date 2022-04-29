@@ -52,3 +52,14 @@ img{
   width: 100%;
   height: 300px;
 }
+
+.reportTable {
+    border-collapse: collapse;
+    display:none;
+}
+
+td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 2px 20px 2px 20px;
+}
