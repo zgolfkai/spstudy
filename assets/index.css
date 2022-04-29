@@ -63,3 +63,9 @@ td {
     border-collapse: collapse;
     padding: 2px 20px 2px 20px;
 }
+
+.container {
+    padding:20px;
+    border: 2px solid black;
+    border-radius: 10px;
+}

@@ -199,24 +199,20 @@ function processData(checkArray,fileToLoad){
       }
     }
   }
-  checkArray.sort((a, b) => {
-    let fa = a.plateSim.toLowerCase(), fb = b.plateSim.toLowerCase();
-
-    if (fa < fb) {
-        return -1;
-    }
-    if (fa > fb) {
-        return 1;
-    }
-    return 0;
-  });
-
-
-
-
-
+  console.log($("#plateMatch").prop("checked"));
+  if($("#plateMatch").prop("checked")){
+    checkArray.sort((a, b) => {
+        var fa = a.plateSim.toLowerCase(), fb = b.plateSim.toLowerCase();
+      if (fa < fb) {
+          return -1;
+      }
+      if (fa > fb) {
+          return 1;
+      }
+      return 0;
+    });
+  }
   console.log(checkArray)
-
   
   data={
     filename:fileToLoad.name.substring(0,fileToLoad.name.length-4),

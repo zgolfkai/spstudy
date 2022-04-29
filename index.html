@@ -1,7 +1,13 @@
-Upload XLSX or CSV file to prep:
-<br>
-<br>
 <div class="container">
+    Upload XLSX or CSV file to prep:<br>
+    Sort by:
+    <input type="radio" id="dateTime" name="sortType" value="dateTime" checked>
+    <label for="dateTime">Date-Time</label>
+    <input type="radio" id="plateMatch" name="sortType" value="plateMatch">
+    <label for="plateMatch">Plate Match</label><br>
+    <br>
+    <br>
+
     <input class="hiddenDiv" id="study_prep" type="file" onchange="parseData(event);">
     <span style="border:1px solid black;border-radius:5px;padding:10px;font-size: 12px;">
         <label for="study_prep" style>Select File (csv/xlsx)</label>
@@ -12,10 +18,11 @@ Upload XLSX or CSV file to prep:
 </div>
 <br>
 <br>
-Upload XLSX to create report:
-<br>
-<br>
 <div class="container">
+    Upload XLSX to create report:
+    <br>
+    <br>
+
     <input class="hiddenDiv" id="report_generation" type="file" multiple onchange="createReport(event);">
     <span style="border:1px solid black;border-radius:5px;padding:10px;font-size: 12px;">
         <label for="report_generation" style>Select Files (xlsx)</label>
