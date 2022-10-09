@@ -65,7 +65,10 @@ td {
 }
 
 .container {
-    padding:20px;
+    padding:10px;
     border: 2px solid black;
     border-radius: 10px;
+    width:49%;
+  display:inline-block;
+  vertical-align:top;
 }

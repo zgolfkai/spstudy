@@ -1,113 +1,184 @@
 <div class="container">
-    Upload XLSX or CSV file to prep:<br>
-    Sort by:
-    <input type="radio" id="dateTime" name="sortType" value="dateTime" checked>
-    <label for="dateTime">Date-Time</label>
-    <input type="radio" id="plateMatch" name="sortType" value="plateMatch">
-    <label for="plateMatch">Plate Match</label><br>
-    <br>
-    <br>
-
-    <input class="hiddenDiv" id="study_prep" type="file" onchange="parseData(event);">
-    <span style="border:1px solid black;border-radius:5px;padding:10px;font-size: 12px;">
-        <label for="study_prep" style>Select File (csv/xlsx)</label>
-    </span>&nbsp;&nbsp;
-    <br>
-    <br>
-    <div id="downloadFile"></div>
+  Upload XLSX/CSV file to prep:<br />
+  Sort:
+  <input type="radio" id="dateTime" name="sortType" value="dateTime" checked />
+  <label for="dateTime">Date-Time</label>
+  <input type="radio" id="plateMatch" name="sortType" value="plateMatch" />
+  <label for="plateMatch">PlateMatch</label><br />
+  <input
+    class="hiddenDiv"
+    id="study_prep"
+    type="file"
+    onchange="parseData(event);"
+  />
+  <span
+    style="
+      border: 1px solid black;
+      border-radius: 5px;
+      padding: 2px;
+      font-size: 12px;
+    "
+  >
+    <label for="study_prep" style>Select File (csv/xlsx)</label> </span
+  >&nbsp;&nbsp;
+  <div id="downloadFile"></div>
 </div>
-<br>
-<br>
 <div class="container">
-    Upload XLSX or XLSM to create report:
-    <br>
-    <br>
-
-    <input class="hiddenDiv" id="report_generation" type="file" multiple onchange="createReport(event);">
-    <span style="border:1px solid black;border-radius:5px;padding:10px;font-size: 12px;">
-        <label for="report_generation" style>Select Files (xlsx/xlsm)</label>
-    </span>&nbsp;&nbsp;
-    <br>
-    <br>
-    <div id="downloadReportFile"></div>
-    <table class="reportTable">
-        <tbody>
-            <tr>
-                <td>Parent</td>
-                <td id="Parent"></td>
-            </tr>
-            <tr>
-                <td>Child</td>
-                <td id="Child"></td>
-            </tr>
-            <tr>
-                <td>Processed</td>
-                <td id="Processed"></td>
-            </tr>
-            <tr>
-                <td>NR-Parent</td>
-                <td id="NR-Parent"></td>
-            </tr>
-            <tr>
-                <td>NR-Child</td>
-                <td id="NR-Child"></td>
-            </tr>
-            <tr>
-                <td>Ignore</td>
-                <td id="Ignore"></td>
-            </tr>
-            <tr>
-                <td>Obstruction</td>
-                <td id="Obstruction"></td>
-            </tr>
-            <tr>
-                <td>Tag found-Gate not open</td>
-                <td id="Tagfound-Gatenotopen"></td>
-            </tr>
-            <tr>
-                <td>Temp Tag</td>
-                <td id="TempTag"></td>
-            </tr>
-            <tr>
-                <td>Emergency Vehicle</td>
-                <td id="EmergencyVehicle"></td>
-            </tr>
-            <tr>
-                <td>Preauthorized Vendor</td>
-                <td id="PreauthorizedVendor"></td>
-            </tr>
-            <tr>
-                <td>Other Lane Captured</td>
-                <td id="OtherLaneCaptured"></td>
-            </tr>
-            <tr>
-                <td>Opted out of LPR</td>
-                <td id="OptedoutofLPR"></td>
-            </tr>
-            <tr>
-                <td>Translation Issue</td>
-                <td id="TranslationIssue"></td>
-            </tr>
-            <tr>
-                <td style="border-left:0px;border-right:0px"><br></td>
-                <td style="border-left:0px;border-right:0px"></td>
-            </tr>
-            <tr>
-                <td>Total # of records</td>
-                <td id="TotalRecords"></td>
-            </tr>
-            <tr>
-                <td>Total cars not processed</td>
-                <td id="TotalCarsNotProcessed"></td>
-            </tr>
-            <tr>
-                <td>Total cars processed</td>
-                <td id="TotalCarsProcessed"></td>
-            </tr>
-            <tr>
-                <td>Accuracy</td>
-                <td id="Accuracy"></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+  Upload XLSX or XLSM to create report:<br />
+  <input
+    class="hiddenDiv"
+    id="report_generation"
+    type="file"
+    multiple
+    onchange="createReport(event);"
+  />
+  <span
+    style="
+      border: 1px solid black;
+      border-radius: 5px;
+      padding: 2px;
+      font-size: 12px;
+    "
+  >
+    <label for="report_generation" style>Select Files (xlsx/xlsm)</label> </span
+  >&nbsp;&nbsp;
+  <div id="downloadReportFile"></div>
+  <table class="reportTable">
+    <tbody>
+      <tr>
+        <td></td>
+        <td id="Date_Header">Total</td>
+      </tr>
+      <tr>
+        <td>Parent</td>
+        <td id="Parent"></td>
+      </tr>
+      <tr>
+        <td>Child</td>
+        <td id="Child"></td>
+      </tr>
+      <tr>
+        <td>Processed</td>
+        <td id="Processed"></td>
+      </tr>
+      <tr>
+        <td>NR-Parent</td>
+        <td id="NR-Parent"></td>
+      </tr>
+      <tr>
+        <td>NR-Child</td>
+        <td id="NR-Child"></td>
+      </tr>
+      <tr>
+        <td>Ignore</td>
+        <td id="Ignore"></td>
+      </tr>
+      <tr>
+        <td>Obstruction</td>
+        <td id="Obstruction"></td>
+      </tr>
+      <tr>
+        <td>Tag found-Gate not open</td>
+        <td id="Tagfound-Gatenotopen"></td>
+      </tr>
+      <tr>
+        <td>Temp Tag</td>
+        <td id="TempTag"></td>
+      </tr>
+      <tr>
+        <td>Emergency Vehicle</td>
+        <td id="EmergencyVehicle"></td>
+      </tr>
+      <tr>
+        <td>Preauthorized Vendor</td>
+        <td id="PreauthorizedVendor"></td>
+      </tr>
+      <tr>
+        <td>Other Lane Captured</td>
+        <td id="OtherLaneCaptured"></td>
+      </tr>
+      <tr>
+        <td>Opted out of LPR</td>
+        <td id="OptedoutofLPR"></td>
+      </tr>
+      <tr>
+        <td>Translation Issue</td>
+        <td id="TranslationIssue"></td>
+      </tr>
+      <tr>
+        <td style="border-left: 0px; border-right: 0px"><br /></td>
+        <td style="border-left: 0px; border-right: 0px"></td>
+      </tr>
+      <tr>
+        <td>Total # of records</td>
+        <td id="TotalRecords"></td>
+      </tr>
+      <tr>
+        <td>Total cars not processed</td>
+        <td id="TotalCarsNotProcessed"></td>
+      </tr>
+      <tr>
+        <td>Total cars processed</td>
+        <td id="TotalCarsProcessed"></td>
+      </tr>
+      <tr>
+        <td>Accuracy</td>
+        <td id="Accuracy"></td>
+      </tr>
+    </tbody>
+  </table>
+</div><!--
+<img
+  id="cam1"
+  onerror="loadImage(1)"
+  style="
+    display: block;
+    -webkit-user-select: none;
+    margin: auto;
+    background-color: hsl(0, 0%, 25%);
+    height: auto;
+    width: 100%;
+  "
+  src="https://216.49.60.246:4411/api/camera/snapshot?width=640&height=480&fps=15"
+/>
+<img
+  id="cam2"
+  onerror="loadImage(2)"
+  style="
+    display: block;
+    -webkit-user-select: none;
+    margin: auto;
+    background-color: hsl(0, 0%, 25%);
+    height: auto;
+    width: 100%;
+  "
+  src="https://73.139.145.141:4434/api/camera/snapshot?width=640&height=480&fps=15"
+/>
+<img
+  id="cam3"
+  onerror="loadImage(3)"
+  style="
+    display: block;
+    -webkit-user-select: none;
+    margin: auto;
+    background-color: hsl(0, 0%, 25%);
+    height: auto;
+    width: 100%;
+  "
+  src="http://216.49.60.246:8403/video1s3.mjpg"
+/>
+<script>
+  function loadImage(image) {
+    switch (image) {
+      case 1:
+        let cam1Window = window.open(
+          "https://216.49.60.246:4411/api/camera/snapshot?width=640&height=480&fps=15",
+          "cam1w"
+        );
+        break;
+      case 2:
+        let cam2Window = window.open(
+          "https://73.139.145.141:4434/api/camera/snapshot?width=640&height=480&fps=15",
+          "cam2w"
+        );
+       --->

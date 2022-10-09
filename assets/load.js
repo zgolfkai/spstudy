@@ -1,6 +1,26 @@
 var checkArray;
 var checkContainer;
 var similarContainer=[];
+var finalReport={
+    "Parent":0,
+    "Child":0,
+    "Processed":0,
+    "NR-Parent":0,
+    "NR-Child":0,
+    "Ignore":0,
+    "Obstruction":0,
+    "Tag found-Gate not open":0,
+    "Temp Tag":0,
+    "Emergency Vehicle":0,
+    "Preauthorized Vendor":0,
+    "Other Lane Captured":0,
+    "Opted out of LPR":0,
+    "Translation Issue":0,
+    "Total Records":0,
+    "Total Cars Not Processed":0,
+    "Total Cars Processed":0,
+    "Accuracy":0
+  }
 
 function csvToArray(str, delimiter = ",") {
   // slice from start of text to the first \n index
@@ -49,9 +69,11 @@ function createReport(sourcefilePath){
           type: 'binary'
         });
         // Here is your object
-         var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets['Summary']);
-         finalArray.push(XL_row_object);
-        processReport(finalArray)
+        var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets['Summary']);
+        finalArray=XL_row_object;
+        console.log('process')
+        processReport(finalArray);
+        
       };
     
       reader.onerror = function(ex) {
@@ -59,55 +81,58 @@ function createReport(sourcefilePath){
       };
     }
   }
+  
 }
 
 function processReport(dataArray){
-  var finalReport={
-    "Parent":0,
-    "Child":0,
-    "Processed":0,
-    "NR-Parent":0,
-    "NR-Child":0,
-    "Ignore":0,
-    "Obstruction":0,
-    "Tag found-Gate not open":0,
-    "Temp Tag":0,
-    "Emergency Vehicle":0,
-    "Preauthorized Vendor":0,
-    "Other Lane Captured":0,
-    "Opted out of LPR":0,
-    "Translation Issue":0,
-    "Total Records":0,
-    "Total Cars Not Processed":0,
-    "Total Cars Processed":0,
-    "Accuracy":0
-  }
+ 
 
 
 
   console.log(dataArray);
-  dataArray.forEach(function(file){
-    finalReport["Parent"]+=parseInt(file[1].undefined);
-    finalReport["Child"]+=parseInt(file[2].undefined);
-    finalReport["Processed"]+=parseInt(file[3].undefined);
-    finalReport["NR-Parent"]+=parseInt(file[4].undefined);
-    finalReport["NR-Child"]+=parseInt(file[5].undefined);
-    finalReport["Ignore"]+=parseInt(file[6].undefined);
-    finalReport["Obstruction"]+=parseInt(file[7].undefined);
-    finalReport["Tag found-Gate not open"]+=parseInt(file[8].undefined);
-    finalReport["Temp Tag"]+=parseInt(file[9].undefined);
-    finalReport["Emergency Vehicle"]+=parseInt(file[10].undefined);
-    finalReport["Preauthorized Vendor"]+=parseInt(file[11].undefined);
-    finalReport["Other Lane Captured"]+=parseInt(file[12].undefined);
-    finalReport["Opted out of LPR"]+=parseInt(file[13].undefined);
-    finalReport["Translation Issue"]+=parseInt(file[14].undefined);
-    finalReport["Total Records"]+=parseInt(file[15].undefined);
-    finalReport["Total Cars Not Processed"]+=parseInt(file[8].undefined);
-    for(i=1;i<15;i++){
-      if(i!=8)
-        finalReport["Total Cars Processed"]+=parseInt(file[i].undefined);
-    }
-  })
+  
+    finalReport["Parent"]+=parseInt(dataArray[1].undefined);
+    finalReport["Child"]+=parseInt(dataArray[2].undefined);
+    finalReport["Processed"]+=parseInt(dataArray[3].undefined);
+    finalReport["NR-Parent"]+=parseInt(dataArray[4].undefined);
+    finalReport["NR-Child"]+=parseInt(dataArray[5].undefined);
+    finalReport["Ignore"]+=parseInt(dataArray[6].undefined);
+    finalReport["Obstruction"]+=parseInt(dataArray[7].undefined);
+    finalReport["Tag found-Gate not open"]+=parseInt(dataArray[8].undefined);
+    finalReport["Temp Tag"]+=parseInt(dataArray[9].undefined);
+    finalReport["Emergency Vehicle"]+=parseInt(dataArray[10].undefined);
+    finalReport["Preauthorized Vendor"]+=parseInt(dataArray[11].undefined);
+    finalReport["Other Lane Captured"]+=parseInt(dataArray[12].undefined);
+    finalReport["Opted out of LPR"]+=parseInt(dataArray[13].undefined);
+    finalReport["Translation Issue"]+=parseInt(dataArray[14].undefined);
+    finalReport["Total Records"]+=parseInt(dataArray[15].undefined);
+    finalReport["Total Cars Not Processed"]+=parseInt(dataArray[8].undefined);
+    finalReport["Total Cars Processed"]+=parseInt(dataArray[17].undefined);
+    
+    
+    $('<td>'+dataArray[0].Community.substring(dataArray[0].Community.indexOf('for')+4,dataArray[0].Community.indexOf(','))+'</td>').insertBefore("#Date_Header");
+    $('<td>'+parseInt(dataArray[1].undefined)+'</td>').insertBefore("#Parent");
+    $('<td>'+parseInt(dataArray[2].undefined)+'</td>').insertBefore("#Child");
+    $('<td>'+parseInt(dataArray[3].undefined)+'</td>').insertBefore("#Processed");
+    $('<td>'+parseInt(dataArray[4].undefined)+'</td>').insertBefore("#NR-Parent");
+    $('<td>'+parseInt(dataArray[5].undefined)+'</td>').insertBefore("#NR-Child");
+    $('<td>'+parseInt(dataArray[6].undefined)+'</td>').insertBefore("#Ignore");
+    $('<td>'+parseInt(dataArray[7].undefined)+'</td>').insertBefore("#Obstruction");
+    $('<td>'+parseInt(dataArray[8].undefined)+'</td>').insertBefore("#Tagfound-Gatenotopen");
+    $('<td>'+parseInt(dataArray[9].undefined)+'</td>').insertBefore("#TempTag");
+    $('<td>'+parseInt(dataArray[10].undefined)+'</td>').insertBefore("#EmergencyVehicle");
+    $('<td>'+parseInt(dataArray[11].undefined)+'</td>').insertBefore("#PreauthorizedVendor");
+    $('<td>'+parseInt(dataArray[12].undefined)+'</td>').insertBefore("#OtherLaneCaptured");
+    $('<td>'+parseInt(dataArray[13].undefined)+'</td>').insertBefore("#OptedoutofLPR");
+    $('<td>'+parseInt(dataArray[14].undefined)+'</td>').insertBefore("#TranslationIssue");
+    $('<td>'+parseInt(dataArray[15].undefined)+'</td>').insertBefore("#TotalRecords");
+    $('<td>'+parseInt(dataArray[8].undefined)+'</td>').insertBefore("#TotalCarsNotProcessed");
+    $('<td>'+parseInt(dataArray[17].undefined)+'</td>').insertBefore("#TotalCarsProcessed");
+    $('<td>'+((parseInt(dataArray[17].undefined)/parseInt(dataArray[15].undefined))*100).toLocaleString(
+    undefined, // leave undefined to use the visitor's browser 
+               // locale or a string like 'en-US' to override it.
+    { minimumFractionDigits: 2 })+'</td>').insertBefore("#Accuracy");
+
   console.log(finalReport);
   $("#Parent").html(finalReport["Parent"]);
   $("#Child").html(finalReport["Child"]);
@@ -133,6 +158,110 @@ function processReport(dataArray){
     $("#downloadReportFile").html('')
     $(".reportTable").css('display','block')
 }
+function newCommunity(csvFilePath){
+  $("#downloadFile").html('Processing file..')
+  var reader = new FileReader();
+
+  var fileToLoad=csvFilePath.srcElement.files[0]
+  console.log(fileToLoad.name);
+  var finalArray;
+  var current;
+
+  var filext=fileToLoad.name.split('.').pop();
+
+  if(filext.toLowerCase()=='xlsx'){
+    reader.readAsBinaryString(fileToLoad);
+    reader.onload = function(e) {
+      var data = e.target.result;
+      var workbook = XLSX.read(data, {
+        type: 'binary'
+      });
+      workbook.SheetNames.forEach(function(sheetName) {
+        // Here is your object
+        var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+        finalArray = XL_row_object;
+        
+      })
+      console.log(finalArray);
+      processComm(finalArray,fileToLoad)
+    };
+  
+    reader.onerror = function(ex) {
+      console.log(ex);
+    };
+  
+    
+  }else if(filext.toLowerCase()=='csv'){
+    reader.readAsText(fileToLoad);
+    reader.onload = function(e) {
+      finalArray = csvToArray(e.target.result);
+      console.log(finalArray);
+      processComm(finalArray,fileToLoad)
+    }
+    
+  }
+}
+
+function processComm(checkArray,fileToLoad){
+ /* checkArray = cleanBlanks(checkArray);
+  checkArray.forEach(function(check){
+    check.similarity=0;
+    check.plateSim='';
+  })
+  
+  for(i=0;i<checkArray.length;i++){
+    for(j=0;j<checkArray.length;j++){
+      if(i!=j){
+        currentSim=similarity(checkArray[i].Plate,checkArray[j].Plate)
+        if(currentSim>checkArray[i].similarity){
+          checkArray[i].similarity=currentSim;
+          checkArray[i].plateSim=checkArray[j].Plate;
+        }
+      }
+    }
+  }
+  console.log($("#plateMatch").prop("checked"));
+  if($("#plateMatch").prop("checked")){
+    checkArray.sort((a, b) => {
+        var fa = a.plateSim.toLowerCase(), fb = b.plateSim.toLowerCase();
+      if (fa < fb) {
+          return -1;
+      }
+      if (fa > fb) {
+          return 1;
+      }
+      return 0;
+    });
+  }
+  console.log(checkArray)
+  
+  data={
+    filename:fileToLoad.name.substring(0,fileToLoad.name.length-4),
+    message:checkArray
+  }
+
+  try{
+    $.ajax({
+      type:"POST",
+      url:"/api/createxls" ,
+      data:JSON.stringify(data),
+      headers:{
+        "Content-Type":"application/json"
+      },
+      //dataType:"json",
+      success:function(data){
+        $("#downloadFile").html('Click to download: <a href="'+data.location+'">'+data.filename+'</a>')
+        return;
+      },
+      error:function(error){
+        console.log(error);
+      }
+    });
+  }catch(error){
+    console.log(error)
+  }*/
+}
+
 
 function parseData(csvFilePath){
   //check csvFilePath
@@ -320,7 +449,7 @@ function similarity(s1, s2) {
   if (longerLength == 0) {
     return 1.0;
   }
-  return (longerLength - editDistance(longer, shorter)) / parseFloat(longerLength);
+  return ((longerLength - editDistance(longer, shorter)) / parseFloat(longerLength)*100);
 }
 
 function editDistance(s1, s2) {

@@ -27,8 +27,8 @@ app.use('/downloads',express.static(__dirname + '/downloads'));
 
 
 app.post("/api/createxls", (req, res, next) => {
-    console.log('request')
-    console.log(req.body);
+    //console.log('request')
+    //console.log(req.body);
     var checkArray=req.body.message;
 
     const output = zipfile.createWriteStream(__dirname + '/downloads/'+req.body.filename+'.xlsm');
@@ -61,10 +61,33 @@ app.post("/api/createxls", (req, res, next) => {
 
 
     var content='';
+  var tempcontent='';
     var counter=1;
+    
     checkArray.forEach(function(check){
-    counter++;
-    if((check.ResidentFoundCount>0)||(check.VisitorFoundCount>0)){
+      tempcontent='';
+      var index=0;
+      var timePart='';
+      counter++;
+      
+      index=check.CaptureDateTime.indexOf(" ");
+      timePart=check.CaptureDateTime.slice(index+1);
+      
+      if(check.CaptureDateTime.slice(check.CaptureDateTime.length-2,check.CaptureDateTime.length)=='PM'){
+        check.CaptureDateTime=check.CaptureDateTime.slice(0, index+1) + (parseInt(timePart.slice(0,timePart.indexOf(":")))+12).toString() + check.CaptureDateTime.slice(check.CaptureDateTime.indexOf(":"));
+        console.log(check.CaptureDateTime);
+        timePart=check.CaptureDateTime.slice(index+1);
+      }else if (timePart.slice(0,timePart.indexOf(":"))=='12'){
+        check.CaptureDateTime=check.CaptureDateTime.slice(0, index+1) + '00' + check.CaptureDateTime.slice(check.CaptureDateTime.indexOf(":"));
+        timePart=check.CaptureDateTime.slice(index+1);
+      }
+      check.CaptureDateTime=check.CaptureDateTime.slice(0,check.CaptureDateTime.length-3);
+      if(timePart.slice(0,timePart.indexOf(":")).length<2){
+          check.CaptureDateTime=check.CaptureDateTime.slice(0, index+1) + '0' + check.CaptureDateTime.slice(index+1);
+      }
+      
+      
+      if((check.ResidentFoundCount>0)||(check.VisitorFoundCount>0)){
         content+='<row r="'+counter+'" spans="1:10" s="26" customFormat="1" x14ac:dyDescent="0.25">'+
         '<c r="A'+counter+'" s="29" t="s"><v>'+ check.CaptureDateTime+'</v></c>'+
         '<c r="B'+counter+'" s="26" t="b"><v></v></c>'+
@@ -72,23 +95,24 @@ app.post("/api/createxls", (req, res, next) => {
         '<c r="D'+counter+'" s="26" t="s"><v>\''+ check.Plate+'</v></c>'+
         '<c r="E'+counter+'" s="27"><v>\''+ check.ResidentFoundCount+'</v></c>'+
         '<c r="F'+counter+'" s="27"><v>\''+ check.VisitorFoundCount+'</v></c>'+
-        '<c r="G'+counter+'" s="30" t="s"><v>'+ check.TagImage+'</v></c>'+
-        '<c r="I'+counter+'" s="26" t="s"><v>\''+ check.similarity+(check.similarity==1?'.0':'')+'</v></c>'+
-        '<c r="J'+counter+'" s="26" t="s"><v>\''+ check.plateSim+'</v></c>'+
+        '<c r="G'+counter+'" s="26" t="s"><v>\'=HYPERLINK("'+ check.TagImage+'")</v></c>'+
+        '<c r="I'+counter+'" s="27" t="s"><v>\''+ parseFloat(check.similarity).toFixed(2)+'%</v></c>'+
+        '<c r="J'+counter+'" s="27" t="s"><v>\''+ check.plateSim+'</v></c>'+
         '</row>';
-    } else {
+            
+      } else {
         content+='<row r="'+counter+'" spans="1:10" x14ac:dyDescent="0.25">'+
-        '<c r="A'+counter+'" s="6" t="s"><v>'+ check.CaptureDateTime+'</v></c>'+
-        '<c r="B'+counter+'" t="s"><v></v></c>'+
-        '<c r="C'+counter+'" t="b"><v>'+ check.IsVisitorAccessAllowed+'</v></c>'+
-        '<c r="D'+counter+'" t="s"><v>\''+ check.Plate+'</v></c>'+
+        '<c r="A'+counter+'" s="36" t="s"><v>'+ check.CaptureDateTime+'</v></c>'+
+        '<c r="B'+counter+'" s="36" t="b"><v></v></c>'+
+        '<c r="C'+counter+'" s="36" t="b"><v>'+ check.IsVisitorAccessAllowed+'</v></c>'+
+        '<c r="D'+counter+'" s="36" t="s"><v>\''+ check.Plate+'</v></c>'+
         '<c r="E'+counter+'" s="4"><v>\''+ check.ResidentFoundCount+'</v></c>'+
         '<c r="F'+counter+'" s="4"><v>\''+ check.VisitorFoundCount+'</v></c>'+
-        '<c r="G'+counter+'" t="s"><v>'+ check.TagImage+'</v></c>'+
-        '<c r="I'+counter+'" t="s"><v>\''+ check.similarity+(check.similarity==1?'.0':'')+'</v></c>'+
-        '<c r="J'+counter+'" t="s"><v>\''+ check.plateSim+'</v></c>'+
+        '<c r="G'+counter+'" s="30" t="s"><v>\'=HYPERLINK("'+ check.TagImage+'")</v></c>'+
+        '<c r="I'+counter+'" s="4" t="s"><v>\''+ parseFloat(check.similarity).toFixed(2)+'%</v></c>'+
+        '<c r="J'+counter+'" s="4" t="s"><v>\''+ check.plateSim+'</v></c>'+
         '</row>';
-    }
+      }
     });
 
     var fs = require('fs');
