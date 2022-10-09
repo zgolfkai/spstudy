@@ -89,28 +89,29 @@ app.post("/api/createxls", (req, res, next) => {
       
       if((check.ResidentFoundCount>0)||(check.VisitorFoundCount>0)){
         content+='<row r="'+counter+'" spans="1:10" s="26" customFormat="1" x14ac:dyDescent="0.25">'+
-        '<c r="A'+counter+'" s="29" t="s"><v>'+ check.CaptureDateTime+'</v></c>'+
-        '<c r="B'+counter+'" s="26" t="b"><v></v></c>'+
-        '<c r="C'+counter+'" s="26" t="b"><v>'+ check.IsVisitorAccessAllowed+'</v></c>'+
-        '<c r="D'+counter+'" s="26" t="s"><v>\''+ check.Plate+'</v></c>'+
-        '<c r="E'+counter+'" s="27"><v>\''+ check.ResidentFoundCount+'</v></c>'+
-        '<c r="F'+counter+'" s="27"><v>\''+ check.VisitorFoundCount+'</v></c>'+
-        '<c r="G'+counter+'" s="26" t="s"><v>\'=HYPERLINK("'+ check.TagImage+'")</v></c>'+
-        '<c r="I'+counter+'" s="27" t="s"><v>\''+ parseFloat(check.similarity).toFixed(2)+'%</v></c>'+
-        '<c r="J'+counter+'" s="27" t="s"><v>\''+ check.plateSim+'</v></c>'+
+        '<c r="A'+counter+'" s="27" t="s"><v>'+ check.CaptureDateTime+'</v></c>'+
+        '<c r="B'+counter+'" s="27" t="b"><v></v></c>'+
+        '<c r="C'+counter+'" s="25" t="b"><v>'+ check.IsVisitorAccessAllowed+'</v></c>'+
+        '<c r="D'+counter+'" s="25" t="s"><v>\''+ check.Plate+'</v></c>'+
+        '<c r="E'+counter+'" s="26"><v>\''+ check.ResidentFoundCount+'</v></c>'+
+        '<c r="F'+counter+'" s="26"><v>\''+ check.VisitorFoundCount+'</v></c>'+
+        '<c r="G'+counter+'" s="28" t="s"><v>\'=HYPERLINK("'+ check.TagImage+'")</v></c>'+
+        '<c r="H'+counter+'" s="27" t="b"><v></v></c>'+
+        '<c r="I'+counter+'" s="26" t="s"><v>\''+ parseFloat(check.similarity).toFixed(2)+'%</v></c>'+
+        '<c r="J'+counter+'" s="26" t="s"><v>\''+ check.plateSim+'</v></c>'+
         '</row>';
-            
       } else {
         content+='<row r="'+counter+'" spans="1:10" x14ac:dyDescent="0.25">'+
-        '<c r="A'+counter+'" s="36" t="s"><v>'+ check.CaptureDateTime+'</v></c>'+
-        '<c r="B'+counter+'" s="36" t="b"><v></v></c>'+
-        '<c r="C'+counter+'" s="36" t="b"><v>'+ check.IsVisitorAccessAllowed+'</v></c>'+
-        '<c r="D'+counter+'" s="36" t="s"><v>\''+ check.Plate+'</v></c>'+
-        '<c r="E'+counter+'" s="4"><v>\''+ check.ResidentFoundCount+'</v></c>'+
-        '<c r="F'+counter+'" s="4"><v>\''+ check.VisitorFoundCount+'</v></c>'+
-        '<c r="G'+counter+'" s="30" t="s"><v>\'=HYPERLINK("'+ check.TagImage+'")</v></c>'+
-        '<c r="I'+counter+'" s="4" t="s"><v>\''+ parseFloat(check.similarity).toFixed(2)+'%</v></c>'+
-        '<c r="J'+counter+'" s="4" t="s"><v>\''+ check.plateSim+'</v></c>'+
+        '<c r="A'+counter+'" t="s"><v>'+ check.CaptureDateTime+'</v></c>'+
+        '<c r="B'+counter+'" t="s"><v></v></c>'+
+        '<c r="C'+counter+'" t="s"><v>'+ check.IsVisitorAccessAllowed+'</v></c>'+
+        '<c r="D'+counter+'" t="s"><v>\''+ check.Plate+'</v></c>'+
+        '<c r="E'+counter+'" s="3"><v>\''+ check.ResidentFoundCount+'</v></c>'+
+        '<c r="F'+counter+'" s="3"><v>\''+ check.VisitorFoundCount+'</v></c>'+
+        '<c r="G'+counter+'" s="25" t="s"><v>\'=HYPERLINK("'+ check.TagImage+'")</v></c>'+
+        '<c r="H'+counter+'" t="s"><v></v></c>'+
+        '<c r="I'+counter+'" s="3" t="s"><v>\''+ parseFloat(check.similarity).toFixed(2)+'%</v></c>'+
+        '<c r="J'+counter+'" s="3" t="s"><v>\''+ check.plateSim+'</v></c>'+
         '</row>';
       }
     });
