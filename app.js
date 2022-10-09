@@ -31,7 +31,7 @@ app.post("/api/createxls", (req, res, next) => {
     //console.log(req.body);
     var checkArray=req.body.message;
 
-    const output = zipfile.createWriteStream(__dirname + '/downloads/'+req.body.filename+'.xlsm');
+    const output = zipfile.createWriteStream(__dirname + '/downloads/'+req.body.filename+'xlsm');
     const archive = archiver('zip', {
       zlib: { level: 9 } // Sets the compression level.
     });
@@ -72,20 +72,17 @@ app.post("/api/createxls", (req, res, next) => {
       
       index=check.CaptureDateTime.indexOf(" ");
       timePart=check.CaptureDateTime.slice(index+1);
-      
+      console.log(timePart);
       if(check.CaptureDateTime.slice(check.CaptureDateTime.length-2,check.CaptureDateTime.length)=='PM'){
         check.CaptureDateTime=check.CaptureDateTime.slice(0, index+1) + (parseInt(timePart.slice(0,timePart.indexOf(":")))+12).toString() + check.CaptureDateTime.slice(check.CaptureDateTime.indexOf(":"));
-        console.log(check.CaptureDateTime);
         timePart=check.CaptureDateTime.slice(index+1);
-      }else if (timePart.slice(0,timePart.indexOf(":"))=='12'){
-        check.CaptureDateTime=check.CaptureDateTime.slice(0, index+1) + '00' + check.CaptureDateTime.slice(check.CaptureDateTime.indexOf(":"));
-        timePart=check.CaptureDateTime.slice(index+1);
+      }else {
+        if (parseInt(timePart.slice(0,timePart.indexOf(":")))<10){
+          check.CaptureDateTime=check.CaptureDateTime.slice(0, index+1) + '0' + timePart;
+          //timePart=check.CaptureDateTime.slice(index+1);
+        }
       }
-      check.CaptureDateTime=check.CaptureDateTime.slice(0,check.CaptureDateTime.length-3);
-      if(timePart.slice(0,timePart.indexOf(":")).length<2){
-          check.CaptureDateTime=check.CaptureDateTime.slice(0, index+1) + '0' + check.CaptureDateTime.slice(index+1);
-      }
-      
+      console.log(check.CaptureDateTime);
       
       if((check.ResidentFoundCount>0)||(check.VisitorFoundCount>0)){
         content+='<row r="'+counter+'" spans="1:10" s="26" customFormat="1" x14ac:dyDescent="0.25">'+
@@ -131,8 +128,8 @@ app.post("/api/createxls", (req, res, next) => {
     archive.directory('template/', false);
     archive.finalize();
     res.json({
-        filename:req.body.filename,
-        location:'/downloads/'+req.body.filename+'.xlsm'
+        filename:req.body.filename+'xlsm',
+        location:'/downloads/'+req.body.filename+'xlsm'
     })
 })
 
